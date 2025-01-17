@@ -11,11 +11,6 @@
           </div>
           <div class="flex items-center">
             <button
-              class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Новая заметка
-            </button>
-            <button
               class="ml-4 text-gray-500 hover:text-gray-700"
               @click="logout"
             >
@@ -29,59 +24,75 @@
     <!-- Main content -->
     <main class="py-6">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Grid of notes -->
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Note card (repeated for example) -->
-          <div class="bg-white overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center justify-between">
-                <h3 class="text-lg font-medium text-gray-900">Заголовок заметки</h3>
-                <div class="flex space-x-2">
-                  <button class="text-gray-400 hover:text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
-                  <button class="text-gray-400 hover:text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
+        <div class="flex gap-6">
+          <!-- Left sidebar with notes list -->
+          <div class="w-1/3 bg-white rounded-lg shadow">
+            <div class="p-4 border-b">
+              <button
+                class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+              >
+                Новая заметка
+              </button>
+            </div>
+            <div class="divide-y divide-gray-200">
+              <!-- Note list item (active) -->
+              <div class="p-4 bg-indigo-50 cursor-pointer hover:bg-indigo-50">
+                <h3 class="text-sm font-medium text-gray-900">Заголовок активной заметки</h3>
+                <p class="mt-1 text-sm text-gray-500 line-clamp-2">
+                  Текст активной заметки...
+                </p>
+                <p class="mt-1 text-xs text-gray-400">12 января 2024</p>
               </div>
-              <p class="mt-3 text-gray-500 text-sm line-clamp-3">
-                Текст заметки, который может быть довольно длинным, но мы показываем только три строки...
-              </p>
-              <div class="mt-4 text-xs text-gray-400">
-                Обновлено: 12 января 2024
+
+              <!-- Note list items -->
+              <div
+                v-for="i in 5"
+                :key="i"
+                class="p-4 cursor-pointer hover:bg-gray-50"
+              >
+                <h3 class="text-sm font-medium text-gray-900">Заголовок заметки {{ i }}</h3>
+                <p class="mt-1 text-sm text-gray-500 line-clamp-2">
+                  Текст заметки {{ i }}...
+                </p>
+                <p class="mt-1 text-xs text-gray-400">11 января 2024</p>
               </div>
             </div>
           </div>
 
-          <!-- Повторим карточку для примера -->
-          <div class="bg-white overflow-hidden shadow rounded-lg">
-            <div class="p-5">
-              <div class="flex items-center justify-between">
-                <h3 class="text-lg font-medium text-gray-900">Другая заметка</h3>
-                <div class="flex space-x-2">
-                  <button class="text-gray-400 hover:text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
-                  <button class="text-gray-400 hover:text-gray-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
+          <!-- Right content area -->
+          <div class="flex-1 bg-white rounded-lg shadow">
+            <div class="p-6">
+              <!-- Note title -->
+              <input
+                type="text"
+                placeholder="Заголовок заметки"
+                class="block w-full text-2xl font-bold border-0 border-b border-transparent bg-white focus:border-indigo-600 focus:ring-0"
+              />
+
+              <!-- Editor toolbar -->
+              <div class="flex items-center space-x-4 my-4 pb-4 border-b border-gray-200">
+                <button
+                  class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+                <div class="h-4 w-px bg-gray-200"></div>
+                <button
+                  class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-              <p class="mt-3 text-gray-500 text-sm line-clamp-3">
-                Еще один пример текста заметки...
-              </p>
-              <div class="mt-4 text-xs text-gray-400">
-                Обновлено: 11 января 2024
-              </div>
+
+              <!-- Note content -->
+              <textarea
+                placeholder="Начните вводить текст заметки..."
+                class="block w-full h-[calc(100vh-300px)] resize-none border-0 bg-white focus:ring-0"
+              ></textarea>
             </div>
           </div>
         </div>
@@ -95,4 +106,11 @@ const logout = () => {
   // Реализуем позже
   console.log('Logout clicked')
 }
-</script> 
+</script>
+
+<style scoped>
+/* Убираем стандартные стили для textarea */
+textarea {
+  outline: none;
+}
+</style> 

@@ -6,9 +6,9 @@ export default defineNuxtConfig({
   hooks: {
     'pages:extend'(routes) {
       routes.push({
-        name: 'notes',
-        path: '/notes',
-        file: '~/pages/notes/[id].vue'
+        name: 'notes-id',
+        path: '/notes/:id',
+        file: '~/pages/notes/index.vue'
       })
     }
   },
