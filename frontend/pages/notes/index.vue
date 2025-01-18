@@ -12,7 +12,7 @@
           <div class="flex items-center">
             <button
               class="ml-4 text-gray-500 hover:text-gray-700"
-              @click="logout"
+              @click="handleLogout"
             >
               Выйти
             </button>
@@ -102,9 +102,15 @@
 </template>
 
 <script setup lang="ts">
-const logout = () => {
-  // Реализуем позже
-  console.log('Logout clicked')
+definePageMeta({
+  middleware: ['auth']
+})
+
+const { logout } = useAuth()
+
+// Теперь logout будет работать
+const handleLogout = () => {
+  logout()
 }
 </script>
 
