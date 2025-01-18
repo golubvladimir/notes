@@ -6,6 +6,28 @@ interface AuthData {
 export const useAuth = () => {
   const config = useRuntimeConfig()
   const router = useRouter()
+  const nuxtApp = useNuxtApp()
+
+  const isAuthenticated = () => {
+    if (!nuxtApp.ssrContext) {
+      return !!localStorage.getItem('token')
+    }
+    return false
+  }
+
+  const getToken = () => {
+    if (!nuxtApp.ssrContext) {
+      return localStorage.getItem('token')
+    }
+    return null
+  }
+
+  const logout = () => {
+    if (!nuxtApp.ssrContext) {
+      localStorage.removeItem('token')
+      router.push('/auth/login')
+    }
+  }
 
   const register = async (data: AuthData) => {
     try {
@@ -17,7 +39,9 @@ export const useAuth = () => {
         }
       )
 
-      localStorage.setItem('token', response.token)
+      if (!nuxtApp.ssrContext) {
+        localStorage.setItem('token', response.token)
+      }
       return response
     } catch (error: any) {
       throw new Error(error.data?.message || 'Ошибка при регистрации')
@@ -34,7 +58,9 @@ export const useAuth = () => {
         }
       )
 
-      localStorage.setItem('token', response.token)
+      if (!nuxtApp.ssrContext) {
+        localStorage.setItem('token', response.token)
+      }
       return response
     } catch (error: any) {
       throw new Error(error.data?.message || 'Неверный email или пароль')
@@ -43,6 +69,9 @@ export const useAuth = () => {
 
   return {
     register,
-    login
+    login,
+    logout,
+    isAuthenticated,
+    getToken
   }
 } 
