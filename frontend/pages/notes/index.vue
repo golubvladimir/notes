@@ -29,6 +29,7 @@
           <div class="w-1/3 bg-white rounded-lg shadow">
             <div class="p-4 border-b">
               <button
+                @click="handleNewNote"
                 class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
               >
                 Новая заметка
@@ -64,6 +65,7 @@
             <div class="p-6">
               <!-- Note title -->
               <input
+                v-model="currentNote.title"
                 type="text"
                 placeholder="Заголовок заметки"
                 class="block w-full text-2xl font-bold border-0 border-b border-transparent bg-white focus:border-indigo-600 focus:ring-0"
@@ -72,7 +74,9 @@
               <!-- Editor toolbar -->
               <div class="flex items-center space-x-4 my-4 pb-4 border-b border-gray-200">
                 <button
-                  class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded"
+                  @click="handleSaveNote"
+                  :disabled="loading"
+                  class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-50"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -80,7 +84,9 @@
                 </button>
                 <div class="h-4 w-px bg-gray-200"></div>
                 <button
-                  class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded"
+                  @click="handleNewNote"
+                  :disabled="loading"
+                  class="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-50"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -90,6 +96,7 @@
 
               <!-- Note content -->
               <textarea
+                v-model="currentNote.content"
                 placeholder="Начните вводить текст заметки..."
                 class="block w-full h-[calc(100vh-300px)] resize-none border-0 bg-white focus:ring-0"
               ></textarea>
@@ -107,8 +114,49 @@ definePageMeta({
 })
 
 const { logout } = useAuth()
+const { createNote } = useNotes()
 
-// Теперь logout будет работать
+// Состояние текущей заметки
+const currentNote = ref({
+  title: '',
+  content: ''
+})
+
+// Состояние загрузки
+const loading = ref(false)
+
+// Функция очистки формы
+const handleNewNote = () => {
+  currentNote.value = {
+    title: '',
+    content: ''
+  }
+}
+
+// Функция сохранения заметки
+const handleSaveNote = async () => {
+  try {
+    loading.value = true
+    
+    // Проверяем, что заметка не пустая
+    if (!currentNote.value.title.trim() || !currentNote.value.content.trim()) {
+      return
+    }
+
+    await createNote({
+      title: currentNote.value.title,
+      content: currentNote.value.content
+    })
+
+    // Очищаем форму после успешного сохранения
+    handleNewNote()
+  } catch (error) {
+    console.error('Ошибка при сохранении заметки:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
 const handleLogout = () => {
   logout()
 }
